@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Graph (plotly){% endblock %}
+
+{% block heading %}Graph (plotly){% endblock %}
+
+{% block nav_bar %}
+<ul class="nav nav-tabs">
+    <li role="presentation" class="active"><a href="#">Home</a></li>
+    <li role="presentation"><a href="#">Profile</a></li>
+    <li role="presentation"><a href="#">Messages</a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="cpu_plot"></div>
+        </div>
+        <script>
+            var url_cpu='/json/cpu';
+        
+            d3.json(url_cpu, function(error, data_cpu) {
+                if (error) return console.warn(error);
+                Plotly.newPlot('cpu_plot', data_cpu);
+            });
+        </script>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div id="mem_plot"></div>
+        </div>
+        <script>
+            var url_mem='/json/mem';
+            
+            var layout_mem = {barmode: 'stack',
+                              //hovermode:'closest',
+                              //xaxis:{zeroline:false, hoverformat: '.2f'},
+                              yaxis: {title: 'Memory in GB',
+                                      zeroline:false, hoverformat: '.3f',
+                                      ticks: 'outside',
+                                      dtick: 2.0,
+                                      ticksuffix: ' GB',
+                                      range: [0, 16]
+                                      },
+                              xaxis: {title: 'Time'},
+                              };
+            
+            d3.json(url_mem, function(error, data_mem) {
+                if (error) return console.warn(error);
+                Plotly.newPlot('mem_plot', data_mem, layout_mem);
+            });
+        </script>
+        <div class="col-sm-6">
+            <div id="swap_plot"></div>
+        </div>
+        <script>
+            var url_swap='/json/swap';
+            
+            var layout_swap = {barmode: 'stack',
+                              //hovermode:'closest',
+                              //xaxis:{zeroline:false, hoverformat: '.2f'},
+                              yaxis: {title: 'Swap in GB',
+                                      zeroline:false, hoverformat: '.3f',
+                                      ticks: 'outside',
+                                      dtick: 4.0,
+                                      ticksuffix: ' GB',
+                                      range: [0, 32]
+                                      },
+                              xaxis: {title: 'Time'},
+                              };
+            
+            d3.json(url_swap, function(error, data_swap) {
+                if (error) return console.warn(error);
+                Plotly.newPlot('swap_plot', data_swap, layout_swap);
+            });
+        </script>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div id="disk_usage_home_plot"></div>
+        </div>
+        <script>
+            var url_disk_usage_home = '/json/disk_usage_home';
+            
+            var layout_disk_usage_home = {//height: 100,
+                                          //width: 100
+                                          title: 'Disk Usage /home'
+                                          };
+            
+            d3.json(url_disk_usage_home, function(error, data_disk_usage_home) {
+                if (error) return console.warn(error);
+                Plotly.newPlot('disk_usage_home_plot', data_disk_usage_home, layout_disk_usage_home);
+            });
+        </script>
+        <div class="col-sm-6">
+            <div id="disk_usage_root_plot"></div>
+        </div>
+        <script>
+            var url_disk_usage_root = '/json/disk_usage_root';
+            
+            var layout_disk_usage_root = {//height: 100,
+                                          //width: 100
+                                          title: 'Disk Usage /',
+                                          };
+            
+            d3.json(url_disk_usage_root, function(error, data_disk_usage_root) {
+                if (error) return console.warn(error);
+                Plotly.newPlot('disk_usage_root_plot', data_disk_usage_root, layout_disk_usage_root);
+            });
+        </script>
+    </div>
+</div>
+{% endblock %}
+
+{% block head_includes %}
+      <meta http-equiv="refresh" content="60" >
+      <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+      <script src="https://d3js.org/d3.v4.min.js"></script>
+{% endblock %}
