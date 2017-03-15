@@ -1,4 +1,8 @@
-led / optimized / DLL files
+# general excludes
+*.db
+
+# python excludes
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
